@@ -7,10 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace BookClient
-{
-    public partial class MainPage : ContentPage
-    {
+namespace BookClient {
+    public partial class MainPage : ContentPage {
         readonly IList<Book> books = new ObservableCollection<Book>();
         readonly BookManager manager = new BookManager();
 
@@ -22,18 +20,18 @@ namespace BookClient
 
         async void OnRefresh(object sender, EventArgs e)
         {
-			this.IsBusy = true;
+            this.IsBusy = true;
 
-			try {
-				var bookCollection = await manager.GetAll();
+            try {
+                var bookCollection = await manager.GetAll();
 
-				foreach (Book book in bookCollection) {
-					if (books.All(b => b.ISBN != book.ISBN))
-						books.Add(book);
-				}
-			} finally {
-				this.IsBusy = false;
-			}
+                foreach (Book book in bookCollection) {
+                    if (books.All(b => b.ISBN != book.ISBN))
+                        books.Add(book);
+                }
+            } finally {
+                this.IsBusy = false;
+            }
         }
 
         async void OnAddNewBook(object sender, EventArgs e)
@@ -52,17 +50,15 @@ namespace BookClient
         {
             MenuItem item = (MenuItem)sender;
             Book book = item.CommandParameter as Book;
-            if (book != null)
-            {
+            if (book != null) {
                 if (await this.DisplayAlert("Delete Book?",
                     "Are you sure you want to delete the book '"
-                        + book.Title + "'?", "Yes", "Cancel") == true)
-                {
-					this.IsBusy = true;
+                        + book.Title + "'?", "Yes", "Cancel") == true) {
+                    this.IsBusy = true;
 
-					try {
-						await manager.Delete(book.ISBN);
-						books.Remove(book);
+                    try {
+                        await manager.Delete(book.ISBN);
+                        books.Remove(book);
 					} finally {
 						this.IsBusy = false;
 					}
